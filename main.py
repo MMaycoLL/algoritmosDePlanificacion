@@ -15,16 +15,16 @@ class inputs:
             print("\n")
             txt = "Proceso {} : "
             print(txt.format(i + 1))
-            proceso = input(" input the proceso : ")
+            proceso = input(" Ingrese el proceso : ")
             self.nombreProceso[i] = proceso
-            at = int(input(" input the arrival time : "))
+            at = int(input(" Ingrese el tiempo de llegada : "))
             self.arrivalTime.append([at, i])
             self.testat[i] = at
-            bt = int(input(" input the burst time : "))
+            bt = int(input(" Ingrese el tiempo de ejecucion : "))
             self.burstTime.append([bt, i])
             self.testbt[i] = bt
-            if option == 3 or option == 4:  # 3 for priority_nonprem  4 fro priority_prem
-                p = int(input(" input the priority of the proceso : "))
+            if option == 3 or option == 4:  # 3 La prioridad del proceso solo se solicita si es un algoritmo de prioridad
+                p = int(input(" Ingrese la prioridad del proceso : "))
                 self.prioridad.append([p, i])
 
 
