@@ -1,4 +1,4 @@
-# algoritmos De Planificacion
+# Algoritmos De Planificacion
  Script echo en python el cual contiene algunos algortimos de planificacion, estan los siguiente algoritmos definidos
  - FCFS(First Come, First Served)
  - RR(Round Robin)
