@@ -114,7 +114,7 @@ class priority_nonprem(inputs):
         self.prioridad.sort()
         time = self.tiempoLlegada[0][0]
         sums = self.tiempoLlegada[0][0] + sum(self.testbt)
-        while time != (sums):
+        while time != sums:
             for i in range(n):
                 index = self.prioridad[i][1]
                 if self.testbt[index] != 0 and self.testat[index] <= time:
@@ -247,62 +247,54 @@ class SRTF(inputs):
 
 
 class HRN:
-    def processData(self, numeroProceso):
-        process_data = []
+    def datoProceso(self, numeroProceso):
+        datoProceso = []
         for i in range(numeroProceso):
             temporary = []
             idProceso = int(input("Ingrese ID del proceso: "))
 
-            arrival_time = int(input(f"Enter Arrival Time for Process {idProceso}: "))
+            tiempoLlegada = int(input(f"Ingrese el tiempo de llegada del proceso {idProceso}: "))
 
-            burst_time = int(input(f"Enter Burst Time for Process {idProceso}: "))
+            tiempoRafaga = int(input(f"Ingrese el tiempo de rafaga del proceso {idProceso}: "))
             # 0 es el estado por defecto. 0 significa no ejecutado y 1 ejecucion completa
-            temporary.extend([idProceso, arrival_time, burst_time, 0])
-            process_data.append(temporary)
-        HRN.schedulingProcess(self, process_data)
+            temporary.extend([idProceso, tiempoLlegada, tiempoRafaga, 0])
+            datoProceso.append(temporary)
+        HRN.procesoPlanificacion(self, datoProceso)
 
-    def schedulingProcess(self, process_data):
+    def procesoPlanificacion(self, datoProceso):
         start_time = []
         exit_time = []
         s_time = 0
-        sequence_of_processes = []
-        process_data.sort(key=lambda x: x[1])
-        '''
-        Sort processes according to the Arrival Time
-        '''
-        for i in range(len(process_data)):
+        secuenciaProcesos = []
+        datoProceso.sort(key=lambda x: x[1])
+        for i in range(len(datoProceso)):  # ordenar procesos de acuerdo a la hora de llegada
             ready_queue = []
             temp = []
             normal_queue = []
-            for j in range(len(process_data)):
-                if (process_data[j][1] <= s_time) and (process_data[j][3] == 0):
-                    response_ratio = 0
-                    response_ratio = float(((s_time - process_data[j][1]) + process_data[j][2]) / process_data[j][2])
-                    '''
-                    Calculating the Response Ratio foe each process
-                    '''
-                    temp.extend([process_data[j][0], process_data[j][1], process_data[j][2], response_ratio])
+            for j in range(len(datoProceso)):
+                if (datoProceso[j][1] <= s_time) and (datoProceso[j][3] == 0):
+                    relacionRespuesta = 0
+                    relacionRespuesta = float(((s_time - datoProceso[j][1]) + datoProceso[j][2]) / datoProceso[j][2])
+                    # Se calcula la relacion de respuesta de cada proceso
+                    temp.extend([datoProceso[j][0], datoProceso[j][1], datoProceso[j][2], relacionRespuesta])
                     ready_queue.append(temp)
                     temp = []
-                elif process_data[j][3] == 0:
-                    temp.extend([process_data[j][0], process_data[j][1], process_data[j][2]])
+                elif datoProceso[j][3] == 0:
+                    temp.extend([datoProceso[j][0], datoProceso[j][1], datoProceso[j][2]])
                     normal_queue.append(temp)
                     temp = []
             if len(ready_queue) != 0:
                 ready_queue.sort(key=lambda x: x[3], reverse=True)
-                '''
-                Sort the processes according to the Highest Response Ratio
-                '''
-                start_time.append(s_time)
+                start_time.append(s_time)  # Ordenar los procesos segun el mayor ratio de respuesta
                 s_time = s_time + ready_queue[0][2]
                 e_time = s_time
                 exit_time.append(e_time)
-                sequence_of_processes.append(ready_queue[0][0])
-                for k in range(len(process_data)):
-                    if process_data[k][0] == ready_queue[0][0]:
+                secuenciaProcesos.append(ready_queue[0][0])
+                for k in range(len(datoProceso)):
+                    if datoProceso[k][0] == ready_queue[0][0]:
                         break
-                process_data[k][3] = 1
-                process_data[k].append(e_time)
+                datoProceso[k][3] = 1
+                datoProceso[k].append(e_time)
             elif len(ready_queue) == 0:
                 if s_time < normal_queue[0][1]:
                     s_time = normal_queue[0][1]
@@ -310,63 +302,55 @@ class HRN:
                 s_time = s_time + normal_queue[0][2]
                 e_time = s_time
                 exit_time.append(e_time)
-                sequence_of_processes.append(normal_queue[0][0])
-                for k in range(len(process_data)):
-                    if process_data[k][0] == normal_queue[0][0]:
+                secuenciaProcesos.append(normal_queue[0][0])
+                for k in range(len(datoProceso)):
+                    if datoProceso[k][0] == normal_queue[0][0]:
                         break
-                process_data[k][3] = 1
-                process_data[k].append(e_time)
-        t_time = HRN.calculateTurnaroundTime(self, process_data)
-        w_time = HRN.calculateWaitingTime(self, process_data)
-        HRN.printData(self, process_data, t_time, w_time, sequence_of_processes)
+                datoProceso[k][3] = 1
+                datoProceso[k].append(e_time)
+        t_time = HRN.calcularTiempoRespuesta(self, datoProceso)
+        w_time = HRN.calcularTiempoEspera(self, datoProceso)
+        HRN.printData(self, datoProceso, t_time, w_time, secuenciaProcesos)
 
-    def calculateTurnaroundTime(self, process_data):
-        total_turnaround_time = 0
-        for i in range(len(process_data)):
-            turnaround_time = process_data[i][4] - process_data[i][1]
-            '''
-            turnaround_time = completion_time - arrival_time
-            '''
-            total_turnaround_time = total_turnaround_time + turnaround_time
-            process_data[i].append(turnaround_time)
-        average_turnaround_time = total_turnaround_time / len(process_data)
-        '''
-        average_turnaround_time = total_turnaround_time / numeroProceso
-        '''
-        return average_turnaround_time
+    def calcularTiempoRespuesta(self, datoProceso):
+        totalTiempoRespuesta = 0
+        for i in range(len(datoProceso)):
+            tiempoRespuesta = datoProceso[i][4] - datoProceso[i][1]
+            # tiempoRespuesta = tiempoFinalizacion - tiempoLegada
+            totalTiempoRespuesta = totalTiempoRespuesta + tiempoRespuesta
+            datoProceso[i].append(tiempoRespuesta)
+        promedioTiempoRespuesta = totalTiempoRespuesta / len(datoProceso)
+        # promedioTiempoRespuesta = totalTiempoRespuesta / numeroProceso
+        return promedioTiempoRespuesta
 
-    def calculateWaitingTime(self, process_data):
-        total_waiting_time = 0
-        for i in range(len(process_data)):
-            waiting_time = process_data[i][5] - process_data[i][2]
-            '''
-            waiting_time = turnaround_time - burst_time
-            '''
-            total_waiting_time = total_waiting_time + waiting_time
-            process_data[i].append(waiting_time)
-        average_waiting_time = total_waiting_time / len(process_data)
-        '''
-        average_waiting_time = total_waiting_time / numeroProceso
-        '''
-        return average_waiting_time
+    def calcularTiempoEspera(self, datoProceso):
+        totalTiempoEspera = 0
+        for i in range(len(datoProceso)):
+            tiempoEspera = datoProceso[i][5] - datoProceso[i][2]
+            #  tiempoEspera = tiempoRespueta - tiempoRafaga
+            totalTiempoEspera = totalTiempoEspera + tiempoEspera
+            datoProceso[i].append(tiempoEspera)
+        promedioTiempoEspera = totalTiempoEspera / len(datoProceso)
+        # promedioTiempoEspera = totalTiempoEspera / numeroProceso
+        return promedioTiempoEspera
 
-    def printData(self, process_data, average_turnaround_time, average_waiting_time, sequence_of_processes):
-        process_data.sort(key=lambda x: x[0])
-        '''
-        Sort processes according to the Process ID
-        '''
-        print("IdProceso  Arrival_Time  Burst_Time      Completed  Completion_Time  Turnaround_Time  Waiting_Time")
+    def printData(self, datoProceso, promedioTiempoRespuesta, promedioTiempoEspera, secuenciaProcesos):
+        datoProceso.sort(key=lambda x: x[0])
+        # Ordenar los procesos segun el ID del proceso
+        print("")
+        print(
+            "IdProceso  tiempoLegada  tiempoRafaga      completado  tiempoFinalizacion  tiempoRespuesta  tiempoEspera")
 
-        for i in range(len(process_data)):
-            for j in range(len(process_data[i])):
-                print(process_data[i][j], end="\t\t\t\t")
+        for i in range(len(datoProceso)):
+            for j in range(len(datoProceso[i])):
+                print(datoProceso[i][j], end="\t\t\t\t")
             print()
+        print("")
+        print(f'Tiempo medio de respuesta: {promedioTiempoRespuesta}')
 
-        print(f'Average Turnaround Time: {average_turnaround_time}')
+        print(f'Tiempo medio de espera: {promedioTiempoEspera}')
 
-        print(f'Average Waiting Time: {average_waiting_time}')
-
-        print(f'Sequence of Processes: {sequence_of_processes}')
+        print(f'Secuencia de los procesos: {secuenciaProcesos}')
 
 
 # Ciclo while para generar menu
@@ -453,4 +437,4 @@ while (1):
     if option == 7:
         numeroProceso = n
         hrn = HRN()
-        hrn.processData(numeroProceso)
+        hrn.datoProceso(numeroProceso)
