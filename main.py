@@ -3,10 +3,10 @@ class inputs:
         self.nombreProceso = [0] * n
         self.tiempoLlegada = [] * n
         self.testat = [0] * n
-        self.burstTime = [] * n
+        self.tiempoRafaga = [] * n
         self.testbt = [0] * n
         self.tiempoFinalizacion = [0] * n
-        self.turnAroundTime = [0] * n
+        self.tiempoRespuesta = [0] * n
         self.tiempoEspera = [0] * n
         self.prioridad = [] * n
 
@@ -21,7 +21,7 @@ class inputs:
             self.tiempoLlegada.append([at, i])
             self.testat[i] = at
             bt = int(input(" Ingrese el tiempo de ejecucion : "))
-            self.burstTime.append([bt, i])
+            self.tiempoRafaga.append([bt, i])
             self.testbt[i] = bt
             if option == 3 or option == 4:  # 3 La prioridad del proceso solo se solicita si es un algoritmo de prioridad
                 p = int(input(" Ingrese la prioridad del proceso : "))
@@ -30,7 +30,8 @@ class inputs:
 
 class FCFS(inputs):
 
-    def getCompletionTime(self):
+    def getTiempoFinalizacion(self):
+        # tiempoFinalizacion
         self.tiempoLlegada.sort()
         time = self.tiempoLlegada[0][0]
         for i in range(n):
@@ -41,28 +42,28 @@ class FCFS(inputs):
                 time += self.testbt[index]
             self.tiempoFinalizacion[index] = time
 
-    def getTurnAroundTime(self):
+    def gettiempoRespuesta(self):
         for i in range(n):
-            self.turnAroundTime[i] = self.tiempoFinalizacion[i] - self.testat[i]
+            self.tiempoRespuesta[i] = self.tiempoFinalizacion[i] - self.testat[i]
 
-    def getWaitingTime(self):
+    def getTiempoEspera(self):
         for i in range(n):
-            self.tiempoEspera[i] = self.turnAroundTime[i] - self.burstTime[i][0]
+            self.tiempoEspera[i] = self.tiempoRespuesta[i] - self.tiempoRafaga[i][0]
 
     def printFcfs(self):
         print("\n")
-        print(" Process  arrivalTime  burstTime  completionTime  turnAroundTime  waitingTime")
+        print(" Proceso  tiempoLlegada  tiempoRafaga  tiempoFinalizacion  tiempoRespuesta  tiempoEspera")
         for x in range(n):
-            txt = "    {}          {}           {}            {}             {}              {} "
-            print(txt.format(self.nombreProceso[x], self.testat[x], self.burstTime[x][0], self.tiempoFinalizacion[x],
-                             self.turnAroundTime[x], self.tiempoEspera[x]))
-        print("\n Average TurnAround Time : " + str(sum(self.turnAroundTime) / n))
-        print(" Tiempo promedio de espera : " + str(sum(self.tiempoEspera) / n))
+            txt = "    {}          {}              {}               {}                  {}               {} "
+            print(txt.format(self.nombreProceso[x], self.testat[x], self.tiempoRafaga[x][0], self.tiempoFinalizacion[x],
+                             self.tiempoRespuesta[x], self.tiempoEspera[x]))
+        print("\n Average TurnAround Time : " + str(sum(self.tiempoRespuesta) / n))
+        print(" tiempo promedio de espera : " + str(sum(self.tiempoEspera) / n))
 
 
 class RR(inputs):
 
-    def getCompletionTime(self, tq):
+    def getTiempoFinalizacion(self, tq):
         self.tiempoLlegada.sort()
         time = self.tiempoLlegada[0][0]
         queue = []
@@ -77,7 +78,7 @@ class RR(inputs):
                 time += self.testbt[index]
                 # print("time : " + str(time))
                 self.tiempoFinalizacion[index] = time
-                # print("completionTime of " + str(index) + " is " + str(time))
+                # print("tiempoFinalizacion de " + str(index) + " is " + str(time))
                 self.testbt[index] = 0
             elif self.testbt[index] > tq and time >= self.testat[index]:
                 self.testbt[index] -= tq
@@ -91,28 +92,28 @@ class RR(inputs):
             k += 1
             # print(queue)
 
-    def getTurnAroundTime(self):
+    def gettiempoRespuesta(self):
         for i in range(n):
-            self.turnAroundTime[i] = self.tiempoFinalizacion[i] - self.testat[i]
+            self.tiempoRespuesta[i] = self.tiempoFinalizacion[i] - self.testat[i]
 
-    def getWaitingTime(self):
+    def getTiempoEspera(self):
         for i in range(n):
-            self.tiempoEspera[i] = self.turnAroundTime[i] - self.burstTime[i][0]
+            self.tiempoEspera[i] = self.tiempoRespuesta[i] - self.tiempoRafaga[i][0]
 
     def printRr(self):
         print("\n")
-        print(" Process  arrivalTime  burstTime  completionTime  turnAroundTime  waitingTime")
+        print(" Proceso  tiempoLlegada  tiempoRafaga  tiempoFinalizacion  tiempoRespuesta  tiempoEspera")
         for x in range(n):
-            txt = "    {}          {}           {}            {}             {}              {} "
-            print(txt.format(self.nombreProceso[x], self.testat[x], self.burstTime[x][0], self.tiempoFinalizacion[x],
-                             self.turnAroundTime[x], self.tiempoEspera[x]))
-        print("\n Average TurnAround Time : " + str(sum(self.turnAroundTime) / n))
-        print(" Tiempo promedio de espera : " + str(sum(self.tiempoEspera) / n))
+            txt = "    {}          {}              {}               {}                  {}               {} "
+            print(txt.format(self.nombreProceso[x], self.testat[x], self.tiempoRafaga[x][0], self.tiempoFinalizacion[x],
+                             self.tiempoRespuesta[x], self.tiempoEspera[x]))
+        print("\n Average TurnAround Time : " + str(sum(self.tiempoRespuesta) / n))
+        print(" tiempo promedio de espera  : " + str(sum(self.tiempoEspera) / n))
 
 
 class priority_nonprem(inputs):
 
-    def getCompletionTime(self):
+    def getTiempoFinalizacion(self):
         self.tiempoLlegada.sort()
         self.prioridad.sort()
         time = self.tiempoLlegada[0][0]
@@ -126,28 +127,28 @@ class priority_nonprem(inputs):
                     self.tiempoFinalizacion[index] = time
                     break
 
-    def getTurnAroundTime(self):
+    def gettiempoRespuesta(self):
         for i in range(n):
-            self.turnAroundTime[i] = self.tiempoFinalizacion[i] - self.testat[i]
+            self.tiempoRespuesta[i] = self.tiempoFinalizacion[i] - self.testat[i]
 
-    def getWaitingTime(self):
+    def getTiempoEspera(self):
         for i in range(n):
-            self.tiempoEspera[i] = self.turnAroundTime[i] - self.burstTime[i][0]
+            self.tiempoEspera[i] = self.tiempoRespuesta[i] - self.tiempoRafaga[i][0]
 
     def printPnp(self):
         print("\n")
-        print(" Process  arrivalTime  burstTime  completionTime  turnAroundTime  waitingTime")
+        print(" Proceso  tiempoLlegada  tiempoRafaga  tiempoFinalizacion  tiempoRespuesta  tiempoEspera")
         for x in range(n):
-            txt = "    {}          {}           {}            {}             {}              {} "
-            print(txt.format(self.nombreProceso[x], self.testat[x], self.burstTime[x][0], self.tiempoFinalizacion[x],
-                             self.turnAroundTime[x], self.tiempoEspera[x]))
-        print("\n Average TurnAround Time : " + str(sum(self.turnAroundTime) / n))
-        print(" Tiempo promedio de espera : " + str(sum(self.tiempoEspera) / n))
+            txt = "    {}          {}              {}               {}                  {}               {} "
+            print(txt.format(self.nombreProceso[x], self.testat[x], self.tiempoRafaga[x][0], self.tiempoFinalizacion[x],
+                             self.tiempoRespuesta[x], self.tiempoEspera[x]))
+        print("\n Average TurnAround Time : " + str(sum(self.tiempoRespuesta) / n))
+        print(" tiempo promedio de espera  : " + str(sum(self.tiempoEspera) / n))
 
 
 class priority_prem(inputs):
 
-    def getCompletionTime(self):
+    def getTiempoFinalizacion(self):
         self.tiempoLlegada.sort()
         self.prioridad.sort()
         time = self.tiempoLlegada[0][0]
@@ -161,92 +162,92 @@ class priority_prem(inputs):
                     if self.testbt[index] == 0: self.tiempoFinalizacion[index] = time
                     break
 
-    def getTurnAroundTime(self):
+    def gettiempoRespuesta(self):
         for i in range(n):
-            self.turnAroundTime[i] = self.tiempoFinalizacion[i] - self.testat[i]
+            self.tiempoRespuesta[i] = self.tiempoFinalizacion[i] - self.testat[i]
 
-    def getWaitingTime(self):
+    def getTiempoEspera(self):
         for i in range(n):
-            self.tiempoEspera[i] = self.turnAroundTime[i] - self.burstTime[i][0]
+            self.tiempoEspera[i] = self.tiempoRespuesta[i] - self.tiempoRafaga[i][0]
 
     def printPp(self):
         print("\n")
-        print(" Process  arrivalTime  burstTime  completionTime  turnAroundTime  waitingTime")
+        print(" Proceso  tiempoLlegada  tiempoRafaga  tiempoFinalizacion  tiempoRespuesta  tiempoEspera")
         for x in range(n):
-            txt = "    {}          {}           {}            {}             {}              {} "
-            print(txt.format(self.nombreProceso[x], self.testat[x], self.burstTime[x][0], self.tiempoFinalizacion[x],
-                             self.turnAroundTime[x], self.tiempoEspera[x]))
-        print("\n Average TurnAround Time : " + str(sum(self.turnAroundTime) / n))
-        print(" Tiempo promedio de espera : " + str(sum(self.tiempoEspera) / n))
+            txt = "    {}          {}              {}               {}                  {}               {} "
+            print(txt.format(self.nombreProceso[x], self.testat[x], self.tiempoRafaga[x][0], self.tiempoFinalizacion[x],
+                             self.tiempoRespuesta[x], self.tiempoEspera[x]))
+        print("\n Average TurnAround Time : " + str(sum(self.tiempoRespuesta) / n))
+        print(" tiempo promedio de espera  : " + str(sum(self.tiempoEspera) / n))
 
 
 class SJF(inputs):
 
-    def getCompletionTime(self):
+    def getTiempoFinalizacion(self):
         self.tiempoLlegada.sort()
-        self.burstTime.sort()
+        self.tiempoRafaga.sort()
         time = self.tiempoLlegada[0][0]
         while time != self.tiempoLlegada[0][0] + sum(self.testbt):
             for i in range(n):
-                index = self.burstTime[i][1]
-                if self.burstTime[i][0] != 0 and self.testat[index] <= time:
-                    time += self.burstTime[i][0]
-                    self.burstTime[i][0] = 0
+                index = self.tiempoRafaga[i][1]
+                if self.tiempoRafaga[i][0] != 0 and self.testat[index] <= time:
+                    time += self.tiempoRafaga[i][0]
+                    self.tiempoRafaga[i][0] = 0
                     self.tiempoFinalizacion[index] = time
                     break
 
-    def getTurnAroundTime(self):
+    def gettiempoRespuesta(self):
         for i in range(n):
-            self.turnAroundTime[i] = self.tiempoFinalizacion[i] - self.testat[i]
+            self.tiempoRespuesta[i] = self.tiempoFinalizacion[i] - self.testat[i]
 
-    def getWaitingTime(self):
+    def getTiempoEspera(self):
         for i in range(n):
-            self.tiempoEspera[i] = self.turnAroundTime[i] - self.testbt[i]
+            self.tiempoEspera[i] = self.tiempoRespuesta[i] - self.testbt[i]
 
     def printSjf(self):
         print("\n")
-        print(" Process  arrivalTime  burstTime  completionTime  turnAroundTime  waitingTime")
+        print(" Proceso  tiempoLlegada  tiempoRafaga  tiempoFinalizacion  tiempoRespuesta  tiempoEspera")
         for x in range(n):
-            txt = "    {}          {}           {}            {}             {}              {} "
+            txt = "    {}          {}              {}               {}                  {}               {} "
             print(txt.format(self.nombreProceso[x], self.testat[x], self.testbt[x], self.tiempoFinalizacion[x],
-                             self.turnAroundTime[x], self.tiempoEspera[x]))
-        print("\n Average TurnAround Time : " + str(sum(self.turnAroundTime) / n))
-        print(" Tiempo promedio de espera : " + str(sum(self.tiempoEspera) / n))
+                             self.tiempoRespuesta[x], self.tiempoEspera[x]))
+        print("\n Average TurnAround Time : " + str(sum(self.tiempoRespuesta) / n))
+        print(" tiempo promedio de espera  : " + str(sum(self.tiempoEspera) / n))
 
 
 class SRTF(inputs):
 
-    def getCompletionTime(self):
+    def getTiempoFinalizacion(self):
         self.tiempoLlegada.sort()
-        self.burstTime.sort()
+        self.tiempoRafaga.sort()
         time = self.tiempoLlegada[0][0]
         while time != (self.tiempoLlegada[0][0] + sum(self.testbt)):
             for i in range(n):
-                index = self.burstTime[i][1]
-                if self.burstTime[i][0] > 0 and self.testat[index] <= time:
-                    self.burstTime[i][0] -= 1
+                index = self.tiempoRafaga[i][1]
+                if self.tiempoRafaga[i][0] > 0 and self.testat[index] <= time:
+                    self.tiempoRafaga[i][0] -= 1
                     time += 1
-                    self.burstTime.sort()
-                    if self.burstTime[i][0] == 0: self.tiempoFinalizacion[index] = time
+                    self.tiempoRafaga.sort()
+                    if self.tiempoRafaga[i][0] == 0: self.tiempoFinalizacion[index] = time
                     break
 
-    def getTurnAroundTime(self):
+    def gettiempoRespuesta(self):
         for i in range(n):
-            self.turnAroundTime[i] = self.tiempoFinalizacion[i] - self.testat[i]
+            self.tiempoRespuesta[i] = self.tiempoFinalizacion[i] - self.testat[i]
 
-    def getWaitingTime(self):
+    def getTiempoEspera(self):
         for i in range(n):
-            self.tiempoEspera[i] = self.turnAroundTime[i] - self.testbt[i]
+            self.tiempoEspera[i] = self.tiempoRespuesta[i] - self.testbt[i]
 
     def printSrtf(self):
         print("\n")
-        print(" Process  arrivalTime  burstTime  completionTime  turnAroundTime  waitingTime")
+        print(" Proceso  tiempoLlegada  tiempoRafaga  tiempoFinalizacion  tiempoRespuesta  tiempoEspera")
         for x in range(n):
-            txt = "    {}          {}           {}            {}             {}              {} "
+            txt = "    {}          {}              {}               {}                  {}               {} "
             print(txt.format(self.nombreProceso[x], self.testat[x], self.testbt[x], self.tiempoFinalizacion[x],
-                             self.turnAroundTime[x], self.tiempoEspera[x]))
-        print("\n Average TurnAround Time : " + str(sum(self.turnAroundTime) / n))
-        print(" Tiempo promedio de espera : " + str(sum(self.tiempoEspera) / n))
+                             self.tiempoRespuesta[x], self.tiempoEspera[x]))
+        print("\n Average TurnAround Time : " + str(sum(self.tiempoRespuesta) / n))
+        print(" tiempo promedio de espera  : " + str(sum(self.tiempoEspera) / n))
 
 
 # driver's code
@@ -281,18 +282,18 @@ while (1):
     if option == 1:
         fcfs = FCFS(n)
         fcfs.getInput(option)
-        fcfs.getCompletionTime()
-        fcfs.getTurnAroundTime()
-        fcfs.getWaitingTime()
+        fcfs.getTiempoFinalizacion()
+        fcfs.gettiempoRespuesta()
+        fcfs.getTiempoEspera()
         fcfs.printFcfs()
 
     if option == 2:
         rr = RR(n)
         tq = int(input(" input the time quantum : "))
         rr.getInput(option)
-        rr.getCompletionTime(tq)
-        rr.getTurnAroundTime()
-        rr.getWaitingTime()
+        rr.getTiempoFinalizacion(tq)
+        rr.gettiempoRespuesta()
+        rr.getTiempoEspera()
         rr.printRr()
 
     if option == 3:
@@ -300,9 +301,9 @@ while (1):
             " \nNota : Al ingresar la prioridad tenga en cuenta que los numeros mas bajos equivalen a una prioridad mas alta ")
         pnp = priority_nonprem(n)
         pnp.getInput(option)
-        pnp.getCompletionTime()
-        pnp.getTurnAroundTime()
-        pnp.getWaitingTime()
+        pnp.getTiempoFinalizacion()
+        pnp.gettiempoRespuesta()
+        pnp.getTiempoEspera()
         pnp.printPnp()
 
     if option == 4:
@@ -310,23 +311,23 @@ while (1):
             " \nNota : Al ingresar la prioridad tenga en cuenta que los numeros mas bajos equivalen a una prioridad mas alta ")
         pp = priority_prem(n)
         pp.getInput(option)
-        pp.getCompletionTime()
-        pp.getTurnAroundTime()
-        pp.getWaitingTime()
+        pp.getTiempoFinalizacion()
+        pp.gettiempoRespuesta()
+        pp.getTiempoEspera()
         pp.printPp()
 
     if option == 5:
         sjf = SJF(n)
         sjf.getInput(option)
-        sjf.getCompletionTime()
-        sjf.getTurnAroundTime()
-        sjf.getWaitingTime()
+        sjf.getTiempoFinalizacion()
+        sjf.gettiempoRespuesta()
+        sjf.getTiempoEspera()
         sjf.printSjf()
 
     if option == 6:
         srtf = SRTF(n)
         srtf.getInput(option)
-        srtf.getCompletionTime()
-        srtf.getTurnAroundTime()
-        srtf.getWaitingTime()
+        srtf.getTiempoFinalizacion()
+        srtf.gettiempoRespuesta()
+        srtf.getTiempoEspera()
         srtf.printSrtf()
