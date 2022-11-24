@@ -247,20 +247,17 @@ class SRTF(inputs):
 
 
 class HRN:
-    def processData(self, numeroProcesos):
+    def processData(self, numeroProceso):
         process_data = []
-        for i in range(numeroProcesos):
+        for i in range(numeroProceso):
             temporary = []
-            process_id = int(input("Enter Process ID: "))
+            idProceso = int(input("Ingrese ID del proceso: "))
 
-            arrival_time = int(input(f"Enter Arrival Time for Process {process_id}: "))
+            arrival_time = int(input(f"Enter Arrival Time for Process {idProceso}: "))
 
-            burst_time = int(input(f"Enter Burst Time for Process {process_id}: "))
-
-            temporary.extend([process_id, arrival_time, burst_time, 0])
-            '''
-            '0' is the state of the process. 0 means not executed and 1 means execution complete
-            '''
+            burst_time = int(input(f"Enter Burst Time for Process {idProceso}: "))
+            # 0 es el estado por defecto. 0 significa no ejecutado y 1 ejecucion completa
+            temporary.extend([idProceso, arrival_time, burst_time, 0])
             process_data.append(temporary)
         HRN.schedulingProcess(self, process_data)
 
@@ -334,7 +331,7 @@ class HRN:
             process_data[i].append(turnaround_time)
         average_turnaround_time = total_turnaround_time / len(process_data)
         '''
-        average_turnaround_time = total_turnaround_time / numeroProcesos
+        average_turnaround_time = total_turnaround_time / numeroProceso
         '''
         return average_turnaround_time
 
@@ -349,7 +346,7 @@ class HRN:
             process_data[i].append(waiting_time)
         average_waiting_time = total_waiting_time / len(process_data)
         '''
-        average_waiting_time = total_waiting_time / numeroProcesos
+        average_waiting_time = total_waiting_time / numeroProceso
         '''
         return average_waiting_time
 
@@ -358,7 +355,7 @@ class HRN:
         '''
         Sort processes according to the Process ID
         '''
-        print("Process_ID  Arrival_Time  Burst_Time      Completed  Completion_Time  Turnaround_Time  Waiting_Time")
+        print("IdProceso  Arrival_Time  Burst_Time      Completed  Completion_Time  Turnaround_Time  Waiting_Time")
 
         for i in range(len(process_data)):
             for j in range(len(process_data[i])):
@@ -372,9 +369,7 @@ class HRN:
         print(f'Sequence of Processes: {sequence_of_processes}')
 
 
-# driver's code
-
-
+# Ciclo while para generar menu
 while (1):
 
     print(" \n\tElija la opcion que desea \n")
@@ -456,6 +451,6 @@ while (1):
         srtf.printSrtf()
 
     if option == 7:
-        numeroProcesos = n
+        numeroProceso = n
         hrn = HRN()
-        hrn.processData(numeroProcesos)
+        hrn.processData(numeroProceso)
