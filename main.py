@@ -29,9 +29,8 @@ class inputs:
                 p = int(input(" Ingrese la prioridad del proceso : "))
                 self.prioridad.append([p, i])
 
-class FCFS(inputs):
-
-    def getTiempoFinalizacion(self):
+class FCFS(inputs):  # algoritmo fcfs (First Come First Served)
+    def getTiempoFinalizacion(self):  # Calcular tiempo de finalizacion
         self.tiempoLlegada.sort()
         time = self.tiempoLlegada[0][0]
         for i in range(n):
@@ -42,15 +41,15 @@ class FCFS(inputs):
                 time += self.testbt[index]
             self.tiempoFinalizacion[index] = time
 
-    def getTiempoRespuesta(self):
+    def getTiempoRespuesta(self):  # Calcular tiempo de respuesta
         for i in range(n):
             self.tiempoRespuesta[i] = self.tiempoFinalizacion[i] - self.testat[i]
 
-    def getTiempoEspera(self):
+    def getTiempoEspera(self):  # Calcular tiempo de espera
         for i in range(n):
             self.tiempoEspera[i] = self.tiempoRespuesta[i] - self.tiempoRafaga[i][0]
 
-    def printFcfs(self):
+    def printFcfs(self):  # Imprimir los datos con la respectiva informacion
         print("\n")
         print(" Proceso  tiempoLlegada  tiempoRafaga  tiempoFinalizacion  tiempoRespuesta  tiempoEspera")
         for x in range(n):
@@ -61,9 +60,9 @@ class FCFS(inputs):
         print(" Tiempo promedio de espera : " + str(sum(self.tiempoEspera) / n))
 
 
-class RR(inputs):
+class RR(inputs):  # Algoritmo RR (Round-robin)
 
-    def getTiempoFinalizacion(self, tq):
+    def getTiempoFinalizacion(self, tq):  # Calcular tiempo de finalizacion
         self.tiempoLlegada.sort()
         time = self.tiempoLlegada[0][0]
         queue = []
@@ -90,15 +89,15 @@ class RR(inputs):
             k += 1
             # print(queue)
 
-    def getTiempoRespuesta(self):
+    def getTiempoRespuesta(self):  # Calcular tiempo de respuesta
         for i in range(n):
             self.tiempoRespuesta[i] = self.tiempoFinalizacion[i] - self.testat[i]
 
-    def getTiempoEspera(self):
+    def getTiempoEspera(self):  # Calcular tiempo de espera
         for i in range(n):
             self.tiempoEspera[i] = self.tiempoRespuesta[i] - self.tiempoRafaga[i][0]
 
-    def printRr(self):
+    def printRr(self):  # Imprimir los datos con la respectiva informacion
         print("\n")
         print(" Proceso  tiempoLlegada  tiempoRafaga  tiempoFinalizacion  tiempoRespuesta  tiempoEspera")
         for x in range(n):
@@ -111,7 +110,7 @@ class RR(inputs):
 
 class priority_nonprem(inputs):
 
-    def getTiempoFinalizacion(self):
+    def getTiempoFinalizacion(self):  # Calcular tiempo de finalizacion
         self.tiempoLlegada.sort()
         self.prioridad.sort()
         time = self.tiempoLlegada[0][0]
@@ -125,15 +124,15 @@ class priority_nonprem(inputs):
                     self.tiempoFinalizacion[index] = time
                     break
 
-    def getTiempoRespuesta(self):
+    def getTiempoRespuesta(self):  # Calcular tiempo de respuesta
         for i in range(n):
             self.tiempoRespuesta[i] = self.tiempoFinalizacion[i] - self.testat[i]
 
-    def getTiempoEspera(self):
+    def getTiempoEspera(self):  # Calcular tiempo de espera
         for i in range(n):
             self.tiempoEspera[i] = self.tiempoRespuesta[i] - self.tiempoRafaga[i][0]
 
-    def printPnp(self):
+    def printPnp(self):  # Imprimir los datos con la respectiva informacion
         print("\n")
         print(" Proceso  tiempoLlegada  tiempoRafaga  tiempoFinalizacion  tiempoRespuesta  tiempoEspera")
         for x in range(n):
@@ -146,7 +145,7 @@ class priority_nonprem(inputs):
 
 class priority_prem(inputs):
 
-    def getTiempoFinalizacion(self):
+    def getTiempoFinalizacion(self):  # Calcular tiempo de finalizacion
         self.tiempoLlegada.sort()
         self.prioridad.sort()
         time = self.tiempoLlegada[0][0]
@@ -160,15 +159,15 @@ class priority_prem(inputs):
                     if self.testbt[index] == 0: self.tiempoFinalizacion[index] = time
                     break
 
-    def getTiempoRespuesta(self):
+    def getTiempoRespuesta(self):  # Calcular tiempo de respuesta
         for i in range(n):
             self.tiempoRespuesta[i] = self.tiempoFinalizacion[i] - self.testat[i]
 
-    def getTiempoEspera(self):
+    def getTiempoEspera(self):  # Calcular tiempo de espera
         for i in range(n):
             self.tiempoEspera[i] = self.tiempoRespuesta[i] - self.tiempoRafaga[i][0]
 
-    def printPp(self):
+    def printPp(self):  # Imprimir los datos con la respectiva informacion
         print("\n")
         print(" Proceso  tiempoLlegada  tiempoRafaga  tiempoFinalizacion  tiempoRespuesta  tiempoEspera")
         for x in range(n):
@@ -181,7 +180,7 @@ class priority_prem(inputs):
 
 class SJF(inputs):
 
-    def getTiempoFinalizacion(self):
+    def getTiempoFinalizacion(self):  # Calcular tiempo de finalizacion
         self.tiempoLlegada.sort()
         self.tiempoRafaga.sort()
         time = self.tiempoLlegada[0][0]
@@ -194,15 +193,15 @@ class SJF(inputs):
                     self.tiempoFinalizacion[index] = time
                     break
 
-    def getTiempoRespuesta(self):
+    def getTiempoRespuesta(self):  # Calcular tiempo de respuesta
         for i in range(n):
             self.tiempoRespuesta[i] = self.tiempoFinalizacion[i] - self.testat[i]
 
-    def getTiempoEspera(self):
+    def getTiempoEspera(self):  # Calcular tiempo de espera
         for i in range(n):
             self.tiempoEspera[i] = self.tiempoRespuesta[i] - self.testbt[i]
 
-    def printSjf(self):
+    def printSjf(self):  # Imprimir los datos con la respectiva informacion
         print("\n")
         print(" Proceso  tiempoLlegada  tiempoRafaga  tiempoFinalizacion  tiempoRespuesta  tiempoEspera")
         for x in range(n):
@@ -215,7 +214,7 @@ class SJF(inputs):
 
 class SRTF(inputs):
 
-    def getTiempoFinalizacion(self):
+    def getTiempoFinalizacion(self):  # Calcular tiempo de finalizacion
         self.tiempoLlegada.sort()
         self.tiempoRafaga.sort()
         time = self.tiempoLlegada[0][0]
@@ -229,15 +228,15 @@ class SRTF(inputs):
                     if self.tiempoRafaga[i][0] == 0: self.tiempoFinalizacion[index] = time
                     break
 
-    def getTiempoRespuesta(self):
+    def getTiempoRespuesta(self):  # Calcular tiempo de respuesta
         for i in range(n):
             self.tiempoRespuesta[i] = self.tiempoFinalizacion[i] - self.testat[i]
 
-    def getTiempoEspera(self):
+    def getTiempoEspera(self):  # Calcular tiempo de espera
         for i in range(n):
             self.tiempoEspera[i] = self.tiempoRespuesta[i] - self.testbt[i]
 
-    def printSrtf(self):
+    def printSrtf(self):  # Imprimir los datos con la respectiva informacion
         print("\n")
         print(" Proceso  tiempoLlegada  tiempoRafaga  tiempoFinalizacion  tiempoRespuesta  tiempoEspera")
         for x in range(n):
@@ -314,7 +313,7 @@ class HRN:
         w_time = HRN.calcularTiempoEspera(self, datoProceso)
         HRN.printData(self, datoProceso, t_time, w_time, secuenciaProcesos)
 
-    def calcularTiempoRespuesta(self, datoProceso):
+    def calcularTiempoRespuesta(self, datoProceso):  # Calcular tiempo de respuesta
         totalTiempoRespuesta = 0
         for i in range(len(datoProceso)):
             tiempoRespuesta = datoProceso[i][4] - datoProceso[i][1]
@@ -325,7 +324,7 @@ class HRN:
         # promedioTiempoRespuesta = totalTiempoRespuesta / numeroProceso
         return promedioTiempoRespuesta
 
-    def calcularTiempoEspera(self, datoProceso):
+    def calcularTiempoEspera(self, datoProceso):  # Calcular tiempo de espera
         totalTiempoEspera = 0
         for i in range(len(datoProceso)):
             tiempoEspera = datoProceso[i][5] - datoProceso[i][2]
@@ -337,12 +336,11 @@ class HRN:
         return promedioTiempoEspera
 
     def printData(self, datoProceso, promedioTiempoRespuesta, promedioTiempoEspera, secuenciaProcesos):
-        datoProceso.sort(key=lambda x: x[0])
+        datoProceso.sort(key=lambda x: x[0])  # Imprimir los datos con los respectivos datos
         # Ordenar los procesos segun el ID del proceso
         print("")
         print(
             "IdProceso  tiempoLegada  tiempoRafaga      completado  tiempoFinalizacion  tiempoRespuesta  tiempoEspera")
-
         for i in range(len(datoProceso)):
             for j in range(len(datoProceso[i])):
                 print(datoProceso[i][j], end="\t\t\t\t")
@@ -357,24 +355,31 @@ class HRN:
 
 # Ciclo while para generar menu
 while (1):
+    # banner
+    print("               __   __   __    ___        __   __        ")
+    print("     /\  |    / _` /  \ |__) |  |   |\/| /  \ /__`       ")
+    print("    /~~\ |___ \__> \__/ |  \ |  |   |  | \__/ .__/       ")
+    print("                       __   ___                          ")
+    print("                      |  \ |__                           ")
+    print("                      |__/ |___                          ")
+    print("  __                    ___    __        __     __       ")
+    print(" |__) |     /\  |\ | | |__  | /  `  /\  /  ` | /  \ |\ | ")
+    print(" |    |___ /~~\ | \| | |    | \__, /~~\ \__, | \__/ | \| ")
 
-    print(" \n\t\tElija la opcion que desea \n")
+    print("        *****************************************")
+    print("        ** Opcion               Algoritmo      **")
+    print("        **                                     **")
+    print("        **   1.                   FCFS         **")
+    print("        **   2.                    RR          **")
+    print("        **   3.            Prioridad expulsiva **")
+    print("        **   4.         Prioridad no expulsiva **")
+    print("        **   5.                    SJF         **")
+    print("        **   6.                   SRTF         **")
+    print("        **   7.                    HRN         **")
+    print("        **   0.                   Salir        **")
+    print("        *****************************************")
 
-    print(" ***************** MENU ******************")
-    print(" *****************************************")
-    print(" ** Opcion               Algoritmo      **")
-    print(" **                                     **")
-    print(" **   1.                   FCFS         **")
-    print(" **   2.                    RR          **")
-    print(" **   3.            Prioridad expulsiva **")
-    print(" **   4.         Prioridad no expulsiva **")
-    print(" **   5.                    SJF         **")
-    print(" **   6.                   SRTF         **")
-    print(" **   7.                    HRN         **")
-    print(" **   0.                   Salir        **")
-    print(" *****************************************")
-
-    option = int(str(input(" \nOpcion: ")))
+    option = int(str(input(" \n\tOPCION: ")))
 
     n = int(str(input(" \nCantidad de procesos a iterar : ")))
     input1 = inputs(n)
