@@ -1,4 +1,5 @@
 class inputs:
+   # declaramos las funciones iniciales a usar en los algorirmos
     def __init__(self, n):
         self.nombreProceso = [0] * n
         self.tiempoLlegada = [] * n
@@ -10,6 +11,7 @@ class inputs:
         self.tiempoEspera = [0] * n
         self.prioridad = [] * n
 
+   # funcion que pedira los datos, teniendo en cuenta que se esta condicionando para que el proceso 3 y 4 pidan prioridad
     def getInput(self, option):
         for i in range(n):
             print("\n")
@@ -356,7 +358,7 @@ class HRN:
 # Ciclo while para generar menu
 while (1):
 
-    print(" \n\tElija la opcion que desea \n")
+    print(" \n\t\tElija la opcion que desea \n")
 
     print(" ***************** MENU ******************")
     print(" *****************************************")
@@ -374,7 +376,7 @@ while (1):
 
     option = int(str(input(" \nOpcion: ")))
 
-    n = int(str(input(" \nIngrese el numero de procesos : ")))
+    n = int(str(input(" \nCantidad de procesos a iterar : ")))
     input1 = inputs(n)
 
     if option == 0:
