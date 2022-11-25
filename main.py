@@ -251,7 +251,7 @@ class HRN:
         datoProceso = []
         for i in range(numeroProceso):
             temporary = []
-            idProceso = int(input("Ingrese ID del proceso: "))
+            idProceso = (input("Ingrese ID del proceso: "))
 
             tiempoLlegada = int(input(f"Ingrese el tiempo de llegada del proceso {idProceso}: "))
 
